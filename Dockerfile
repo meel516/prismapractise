@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 8002
 
 # Start the app using ts-node
-CMD ["ts-node", "src/index.ts"]
+CMD ["ts-node", "src/index.js"]
