@@ -174,6 +174,14 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "windows"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -199,8 +207,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres.tdovzfkqmqwcsuhnlsug:gW5JF9Z6BjBvnU%@aws-0-ap-south-1.pooler.supabase.com:5432/postgres/parking_db\"\n}\n\nmodel Building {\n  id     Int     @id @default(autoincrement())\n  name   String\n  floors Floor[]\n}\n\nmodel Floor {\n  id          Int      @id @default(autoincrement())\n  floorNumber Int\n  building    Building @relation(fields: [buildingId], references: [id])\n  buildingId  Int\n  slots       Slot[]\n}\n\nmodel Slot {\n  id          Int     @id @default(autoincrement())\n  slotId      String\n  isAvailable Boolean @default(true)\n  floor       Floor   @relation(fields: [floorId], references: [id])\n  floorId     Int\n  car         Car?    @relation(fields: [carId], references: [id])\n  carId       Int?    @unique\n}\n\nmodel Car {\n  id                 Int    @id @default(autoincrement())\n  registrationNumber String @unique\n  ownerName          String\n  slot               Slot?\n}\n\nmodel Chat {\n  id        Int       @id @default(autoincrement())\n  userId    String\n  message   String\n  parentId  Int?\n  parent    Chat?     @relation(\"ChatComments\", fields: [parentId], references: [id])\n  comments  Chat[]    @relation(\"ChatComments\")\n  blogId    String?\n  createdAt DateTime  @default(now())\n  updatedAt DateTime? @updatedAt\n  edited    Boolean   @default(false)\n  deleted   Boolean   @default(false) // optional, for soft delete\n}\n",
-  "inlineSchemaHash": "9c29aba300f9f47ca2538fb6dd6ad6105a1de62e5c3c9953bc51f694f0bb5832",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"native\", \"windows\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres.tdovzfkqmqwcsuhnlsug:gW5JF9Z6BjBvnU%@aws-0-ap-south-1.pooler.supabase.com:5432/postgres/parking_db\"\n}\n\nmodel Building {\n  id     Int     @id @default(autoincrement())\n  name   String\n  floors Floor[]\n}\n\nmodel Floor {\n  id          Int      @id @default(autoincrement())\n  floorNumber Int\n  building    Building @relation(fields: [buildingId], references: [id])\n  buildingId  Int\n  slots       Slot[]\n}\n\nmodel Slot {\n  id          Int     @id @default(autoincrement())\n  slotId      String\n  isAvailable Boolean @default(true)\n  floor       Floor   @relation(fields: [floorId], references: [id])\n  floorId     Int\n  car         Car?    @relation(fields: [carId], references: [id])\n  carId       Int?    @unique\n}\n\nmodel Car {\n  id                 Int    @id @default(autoincrement())\n  registrationNumber String @unique\n  ownerName          String\n  slot               Slot?\n}\n\nmodel Chat {\n  id        Int       @id @default(autoincrement())\n  userId    String\n  message   String\n  parentId  Int?\n  parent    Chat?     @relation(\"ChatComments\", fields: [parentId], references: [id])\n  comments  Chat[]    @relation(\"ChatComments\")\n  blogId    String?\n  createdAt DateTime  @default(now())\n  updatedAt DateTime? @updatedAt\n  edited    Boolean   @default(false)\n  deleted   Boolean   @default(false) // optional, for soft delete\n}\n",
+  "inlineSchemaHash": "8bfb5cb48c5182a42a42b728a4f628170432c6ef047138cce250977fe6cd5249",
   "copyEngine": true
 }
 config.dirname = '/'
