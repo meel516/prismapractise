@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres.tdovzfkqmqwcsuhnlsug:gW5JF9Z6BjBvnU%@aws-0-ap-south-1.pooler.supabase.com:5432/postgres/parking_db"
+}
+
+model Building {
+  id     Int     @id @default(autoincrement())
+  name   String
+  floors Floor[]
+}
+
+model Floor {
+  id          Int      @id @default(autoincrement())
+  floorNumber Int
+  building    Building @relation(fields: [buildingId], references: [id])
+  buildingId  Int
+  slots       Slot[]
+}
+
+model Slot {
+  id          Int     @id @default(autoincrement())
+  slotId      String
+  isAvailable Boolean @default(true)
+  floor       Floor   @relation(fields: [floorId], references: [id])
+  floorId     Int
+  car         Car?    @relation(fields: [carId], references: [id])
+  carId       Int?    @unique
+}
+
+model Car {
+  id                 Int    @id @default(autoincrement())
+  registrationNumber String @unique
+  ownerName          String
+  slot               Slot?
+}
+
+model Chat {
+  id        Int       @id @default(autoincrement())
+  userId    String
+  message   String
+  parentId  Int?
+  parent    Chat?     @relation("ChatComments", fields: [parentId], references: [id])
+  comments  Chat[]    @relation("ChatComments")
+  blogId    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  edited    Boolean   @default(false)
+  deleted   Boolean   @default(false) // optional, for soft delete
+}
