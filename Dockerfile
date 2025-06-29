@@ -1,23 +1,23 @@
+# Use lightweight Node.js image
 FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Install app dependencies
+# Copy package.json and package-lock.json (or yarn.lock)
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Install ts-node and nodemon globally for dev mode
-RUN npm install -g ts-node nodemon
+# Install ts-node globally (for running TypeScript directly)
+RUN npm install -g ts-node typescript
 
-# Copy source code
+# Copy the rest of your app
 COPY . .
 
-# Expose port
+# Expose the port your app listens on
 EXPOSE 8002
 
-# Use legacy polling for file watching (Alpine-specific workaround)
-ENV NODE_OPTIONS="--watch"
-
-# Run using nodemon and ts-node (assumes TypeScript project)
-CMD ["nodemon", "--legacy-watch", "--ext", "ts,json", "--exec", "ts-node", "src/index.ts"]
+# Start the app using ts-node
+CMD ["ts-node", "src/index.ts"]
