@@ -1,19 +1,23 @@
 FROM node:20-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Install dependencies
+# Install app dependencies
 COPY package*.json ./
 RUN npm install
 
-# Install nodemon globally (ensure it's there)
-RUN npm install -g nodemon
+# Install ts-node and nodemon globally for dev mode
+RUN npm install -g ts-node nodemon
 
-# Copy app source
+# Copy source code
 COPY . .
 
-# Expose dev port
+# Expose port
 EXPOSE 8002
 
-# Use legacy watch to fix file watching inside Docker
-CMD ["ts-node","src/index.js"]
+# Use legacy polling for file watching (Alpine-specific workaround)
+ENV NODE_OPTIONS="--watch"
+
+# Run using nodemon and ts-node (assumes TypeScript project)
+CMD ["nodemon", "--legacy-watch", "--ext", "ts,json", "--exec", "ts-node", "src/index.ts"]
